@@ -1,0 +1,87 @@
+<%- include('header', {title: 'Upload' }) %>
+
+    <div class="upload-page">
+        <form id="upload-form"
+            class="flex flex-col items-center w-full self-center bg-gray-600 p-5 text-3xl text-gray-300">
+            <h1>Upload Movie</h1>
+            <div class="form-content flex flex-col gap-5 p-5 justify-between">
+                <div class="form-group flex gap-5 flex-col">
+                    <div class="form-group flex flex-col gap-2">
+                        <label for="title">Title:</label>
+                        <input type="text" name="title" class="outline-none px-3 w-full py-4 bg-white text-black"
+                            id="title" placeholder="Title of the movie e.x Avengers" required autofocus
+                            autocomplete="off">
+                    </div>
+                    <div class="form-group flex flex-col gap-2">
+                        <label for="desc">Description:</label>
+                        <textarea name="desc" class="outline-none px-3 w-full py-4 bg-white text-black" id="desc"
+                            placeholder="Description of the Movie" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group flex gap-5 flex-col md:flex-row">
+                    <div class="form-group flex flex-col gap-5 items-center justify-center w-full">
+                        <label for="upload-img" class="lbl-img">
+                            <i class="fa fa-upload fa-3x cursor-pointer icon" id="upload-icon"></i>
+                        </label>
+                        <input type="file" name="image" style="display: none;"
+                            class="outline-none px-3 w-full py-4 text-black" id="image-path" required>
+                        <div id="file-name" class="text-white mt-2">No image selected</div>
+                    </div>
+                </div>
+            </div>
+            <button id="upload-btn"
+                class="bg-violet-500 hover:bg-violet-600 px-6 py-2 rounded cursor-pointer transition text-white">Upload</button>
+        </form>
+    </div>
+
+    <%- include('footer') %>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const icon = document.querySelector('.lbl-img')
+                const input = document.querySelector('#image-path')
+                const fileName = document.querySelector('#file-name')
+
+                icon.addEventListener('click', () => {
+                    input.click()
+                })
+
+                // Display teh file name once a file is selected
+                input.addEventListener('change', () => {
+                    const selectedFile = input.files[0] ? input.files[0].name : 'No image selected'
+                    fileName.textContent = selectedFile
+                    // alert('selected file: ' + fileName)
+                })
+            })
+
+            const form = document.getElementById("upload-form")
+            form.addEventListener('submit', async (event)=>{
+                event.preventDefault()
+                try {
+                    const title = document.getElementById('title').value
+                    const desc = document.getElementById('desc').value
+                    const img = document.getElementById('image-path').files[0]
+
+                    const movieData = new FormData()
+                    movieData.append('title', title)
+                    movieData.append('desc', desc)
+                    movieData.append('image', img)
+
+                    const response = await fetch('/upload-movie', {
+                        method: 'POST',
+                        body: movieData
+                    })
+
+                    const result = await response.json()
+                    if (result.message) {
+                        alert(result.message)
+                        window.location.href = result.redirect
+                    } else {
+                        alert('Error uploading movie')
+                    }
+                } catch (err) {
+                    alert(err.message)
+                }
+            });
+
+        </script>

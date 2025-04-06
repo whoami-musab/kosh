@@ -1,0 +1,148 @@
+<%- include('header', {title: 'Watch ' + movie.title, movie: movie}) %>
+
+    <div class="watch-movie mx-auto container px-5 flex flex-col gap-6 items-center justify-center min-h-screen mt-4">
+        <h1 class="text-5xl md:self-start">
+            <%= movie.title %>
+        </h1>
+        <div class="watch-player transition-all w-full h-[720px] bg-gray-900 relative shadow-2xl shadow-gray-950"
+            id="watch-player">
+            <div class="player-controls absolute top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%]">
+                <div class="spinner w-[5rem] h-[5rem] rounded-full border-t-gray-300 border-l-gray-600 border-r-gray-600 border-b-gray-300 border-2 animate-spin hidden transition"
+                    id="spinner"></div>
+                <label for="player-pause" class="hidden" id="player-pause">
+                    <i
+                        class="fa-solid fa-circle-pause fa-3x cursor-pointer opacity-80 hover:opacity-100 transition-all"></i>
+                </label>
+                <label for="player-play" id="player-play">
+                    <i
+                        class="fa-solid fa-circle-play fa-3x cursor-pointer opacity-80 hover:opacity-100 transition-all"></i>
+                </label>
+            </div>
+            <!-- <iframe width="100%" height="100%" src="https://www.youtube.com/embed/iHkAcnwb1P8?si=mjzi5p-lUpJTMejh" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+            <video id="movie-video" preload="metadata" class="w-full h-full object-cover" controls>
+                <source src="file:///C:/Users/ASUS%20TUF%20F17/Videos/NVIDIA/Call%20of%20Duty%20Black%20Ops%206/Call%20of%20Duty%20Black%20Ops%206%202025.03.25%20-%2014.31.10.01.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            <div class="player-controls w-full h-[5rem] bg-gray-950/80 absolute bottom-0 left-0 transition-all"
+                id="toggle-controls">
+                <input type="checkbox" id="full-screen" style="display: none;">
+                <input type="checkbox" id="exit-screen" style="display: none;">
+                <div class="set-screen absolute top-[50%] right-5 -translate-y-[50%]">
+                    <label for="exit-full-screen" id="exit-full-screen-btn" class="hidden">
+                        <i class="fa-solid fa-compress fa-2x cursor-pointer"></i>
+                    </label>
+
+                    <label for="full-screen" id="full-screen-btn">
+                        <i
+                            class="fa-solid fa-expand fa-2x opacity-80 hover:opacity-100 transition hover:cursor-pointer">
+                        </i>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="movie-details md:self-start">
+            <h1 class="text-3xl flex flex-col gap-3">
+                <p>
+                    Description:
+                </p>
+                <%= movie.description %>
+            </h1>
+        </div>
+    </div>
+
+    <%- include('footer') %>
+
+        <script>
+            const full = document.getElementById('full-screen') // Full screen Input Hidden
+            const exit_full = document.getElementById('exit-screen') // Exit full screen Input Hidden
+            const fullBtn = document.getElementById('full-screen-btn') // Full screen BTN
+            const exitBtn = document.getElementById('exit-full-screen-btn') // Exit Full BTN
+            const watchPlayer = document.getElementById('watch-player') // Watch Player
+            const play = document.getElementById('player-play') // Play BTN
+            const pause = document.getElementById('player-pause') // Pause BTN
+            const spinner = document.getElementById('spinner') // Spinner
+            const showControls = document.getElementById('toggle-controls') // Toggle the controls
+            const video = document.getElementById('movie-video') // Video Element
+
+            // Show the controls when mouse enter the watch player
+            watchPlayer.addEventListener('mousemove', () => {
+                showControls.classList.remove('hidden')
+            })
+
+            // // Hide the controls when mouse out the watch player
+            // watchPlayer.addEventListener('mouseout', () => {
+            //     showControls.classList.add('hidden')
+            // })
+
+            // // Handle Play/Pause Video
+            // watchPlayer.addEventListener('click', () => {
+            //     if (!video.paused) {
+            //         // If video is playing, pause it
+            //         video.pause();
+            //         play.classList.remove('hidden');
+            //         pause.classList.add('hidden');
+            //     } else {
+            //         // If video is paused, play it
+            //         play.classList.add('hidden');
+            //         spinner.classList.remove('hidden');
+
+            //         // Simulate loading delay before playing
+            //         setTimeout(() => {
+            //             video.play();
+            //             spinner.classList.add('hidden');
+            //             pause.classList.remove('hidden');
+            //             showControls.classList.add('hidden'); // Hide controls after playing
+            //         }, 1000);
+            //     }
+            // });
+
+            // Handle Play/Pause Video
+            watchPlayer.addEventListener('click', () => {
+                if(play && !play.classList.contains('hidden')){
+
+                    video.pause()
+
+                    // If WatchPlayer clicked Hide Play BTN
+                    play.classList.add('hidden')
+
+                    // Show the Spinner loading if user clicked the play BTN
+                    spinner.classList.remove('hidden')
+
+                    setTimeout(()=>{
+                        video.play()
+                        // Hide the spinner while video playing
+                        spinner.classList.add('hidden')
+                        showControls.classList.add('hidden')
+
+                        // Show the pause
+                        pause.classList.remove('hidden')
+                    }, 1000)
+                }else if(pause && !pause.classList.contains('hidden')){
+
+                    // If the pause btn is visible, that means the video is playing, so pause it
+                    pause.classList.add('hidden')
+
+                    // Show play btn again
+                    play.classList.remove('hidden')
+                }
+
+            })
+
+            // Toggle full screen
+            fullBtn.addEventListener('click', () => {
+                if (watchPlayer.requestFullscreen) {
+                    watchPlayer.requestFullscreen()
+                    fullBtn.classList.add('hidden')
+                    exitBtn.classList.remove('hidden')
+                }
+            })
+
+            exitBtn.addEventListener('click', () => {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen()
+                    exitBtn.classList.add('hidden')
+                    fullBtn.classList.remove('hidden')
+                }
+            })
+        </script>
