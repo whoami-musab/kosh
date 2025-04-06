@@ -59,7 +59,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.get('/', async (req, res) => {
-    res.render('index')
+    res.render('index', { redirect: '/movies' })
 })
 
 app.use('/profile', profileRouter)
