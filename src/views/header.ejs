@@ -40,7 +40,7 @@
                 <li>
                     <a href="/episodes" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">Episodes</a>
                 </li>
-                <% if (user) { %>
+                <% if (user && user.isAdmin === true) { %>
                     <li>
                         <a href="/upload-movie" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
                             <i class="fa-solid fa-cloud-arrow-up"></i>
