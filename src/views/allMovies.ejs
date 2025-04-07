@@ -2,9 +2,9 @@
 
 <div class="all-movies flex flex-col mx-auto container items-center min-h-screen w-full px-5">
     <h1 class="text-2xl font-bold underline py-5">List of series</h1>
-    <div class="all-movie w-full flex gap-3 items-center justify-center flex-wrap h-full">
+    <div class="all-movie w-full flex gap-3 items-center justify-center flex-wrap h-full mb-5">
         <% movie.forEach(movies => { %>
-            <a href="movies/<%=movies._id %>" target="_blank" class="md:w-[235px] md:h-[435px] w-full h-full overflow-hidden">
+            <a href="movies/<%=movies._id %>" target="_blank" class="md:w-[235px] md:h-[435px] w-full h-full overflow-hidden mb-10 pb-5">
                 <div class="all-movies content text-center gap-5 flex flex-col">
                     <div class="img h-full w-full md:h-[335px] overflow-hidden">
                         <img src="<%= movies.imgPath %>" alt="<%= movies.title %>" class="md:w-[235px] md:h-[340px] w-full h-full hover:rounded rounded hover:scale-110 transition-transform" />
@@ -12,7 +12,7 @@
                     <p>
                         <%= movies.title %>
                     </p>
-                    <p class="w-[235px] h-[1rem] self-center">
+                    <p class="w-[235px] h-[4.2rem] self-center overflow-hidden">
                         <%= movies.description %>
                     </p>
                     Dynamic Star Rating
