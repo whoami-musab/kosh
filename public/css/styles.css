@@ -83,6 +83,12 @@
 .mt-14 {
   margin-top: calc(var(--spacing) * 14);
 }
+.mt-\[50\%\] {
+  margin-top: 50%;
+}
+.mt-\[70\%\] {
+  margin-top: 70%;
+}
 .contents {
   display: contents;
 }

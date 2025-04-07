@@ -59,7 +59,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.get('/', async (req, res) => {
-    res.render('index', { redirect: '/movies' })
+    const movie = await newMovie.find({})
+    res.render('index', {movie })
 })
 
 app.use('/profile', profileRouter)

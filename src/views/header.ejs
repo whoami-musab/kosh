@@ -31,9 +31,11 @@
                 <li>
                     <a href="/episodes" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">Episodes</a>
                 </li>
-                <li>
-                    <a href="/upload-movie" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">Upload Movie</a>
-                </li>
+                <% if (user) { %>
+                    <li>
+                        <a href="/upload-movie" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">Upload Movie</a>
+                    </li>
+                <% } %>
             </ul>
             <ul class="flex gap-5">
                 <% if (user) { %>
