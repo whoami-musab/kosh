@@ -20,6 +20,9 @@
 .-top-10 {
   top: calc(var(--spacing) * -10);
 }
+.top-0 {
+  top: calc(var(--spacing) * 0);
+}
 .top-\[0\%\] {
   top: 0%;
 }
@@ -28,6 +31,9 @@
 }
 .right-5 {
   right: calc(var(--spacing) * 5);
+}
+.right-\[1\%\] {
+  right: 1%;
 }
 .bottom-0 {
   bottom: calc(var(--spacing) * 0);

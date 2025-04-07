@@ -7,7 +7,7 @@ const uploadMovie = express.Router();
 
 // Render upload page if user is logged in
 uploadMovie.get('/', (req, res) => {
-    if (req.session.user) {
+    if (req.session.user && req.session.user.isAdmin === true) {
         res.render('upload-movie');
     } else {
         return res.redirect('/login');

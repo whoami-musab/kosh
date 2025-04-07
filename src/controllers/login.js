@@ -46,7 +46,8 @@ loginRouter.post('/', async (req, res) => {
         req.session.user = {
             id: user._id,
             username: email,
-            token: token
+            token: token,
+            isAdmin: user.isAdmin
         }
 
         // res.redirect('/profile')

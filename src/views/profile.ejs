@@ -1,6 +1,7 @@
 <%- include('header', {title: 'Profile Page - ' +user.name.charAt(0).toUpperCase() + user.name.slice(1)}) %>
 
-    <div class="profile-page min-h-screen mx-auto container w-full flex flex-col items-center justify-center gap-20 px-5">
+    <div
+        class="profile-page min-h-screen mx-auto container w-full flex flex-col items-center justify-center gap-20 px-5">
         <h1 class="text-3xl underline py-5">
             Hello <%= user.name %>
         </h1>
@@ -8,24 +9,35 @@
             <div class="details flex flex-col gap-5 items-center">
                 <div class="img rounded-full w-[15rem] h-[15rem] border-2">
                 </div>
-                <p class="text-6xl font-bold">
-                    <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
-                </p>
+                <div class="isAdmin">
+                    <% if (user.isAdmin) { %>
+                    <span>Admin</span>
+                    <% } else { %>
+                            <span>User</span>
+                            <% } %>
+                                <p class="text-6xl font-bold">
+                                    <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
+                                </p>
+                </div>
             </div>
-            <div class="user-details-content w-full flex flex-col gap-15 md:w-2xl items-center md:flex-nowrap flex-wrap">
-                <p class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
+            <div
+                class="user-details-content w-full flex flex-col gap-15 md:w-2xl items-center md:flex-nowrap flex-wrap">
+                <p
+                    class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
                     <strong>Email:</strong>
                     <span>
                         <%= user.email.charAt(0).toUpperCase() + user.email.slice(1) %>
                     </span>
                 </p>
-                <p class="flex items-center justify-between w-full text-4xl bg-gray-900 p-5 md:flex-nowrap flex-wrap gap-5">
+                <p
+                    class="flex items-center justify-between w-full text-4xl bg-gray-900 p-5 md:flex-nowrap flex-wrap gap-5">
                     <strong>Address:</strong>
                     <span>
                         <%= user.address.charAt(0).toUpperCase() + user.address.slice(1) %>
                     </span>
                 </p>
-                <p class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
+                <p
+                    class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
                     <strong>Phone Number:</strong>
                     <span>
                         <%= user.phone.charAt(0).toUpperCase() + user.phone.slice(1) %>
@@ -34,7 +46,8 @@
             </div>
         </div>
         <button id="register-btn"
-            class="bg-violet-500 mb-5 hover:bg-violet-600 px-6 py-2 rounded cursor-pointer transition text-white w-sm flex justify-between items-center" disabled>
+            class="bg-violet-500 mb-5 hover:bg-violet-600 px-6 py-2 rounded cursor-pointer transition text-white w-sm flex justify-between items-center"
+            disabled>
             Edit Profile
             <i class="fa-solid fa-edit"></i>
         </button>
