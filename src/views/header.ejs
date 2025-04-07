@@ -53,11 +53,18 @@
                 <% if (user) { %>
                     <li>
                         <a href="/profile"
-                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">profile</a>
+                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
+                            <i class="fa-solid fa-user"></i>
+                            profile
+                        </a>
+
                     </li>
                     <li>
                         <a href="/logout"
-                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400 cursor-pointer">Logout</a>
+                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400 cursor-pointer">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </a>
                     </li>
                     <% } else { %>
                         <li>
