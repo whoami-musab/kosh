@@ -16,7 +16,7 @@ loginRouter.get('/', (req, res) => {
 });
 
 loginRouter.post('/', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     // Check if email and password are provided
     if (!email || !password) {
@@ -27,14 +27,14 @@ loginRouter.post('/', async (req, res) => {
         // Find the user by email
         const user = await Register.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials!!...' });  // return here
+            return res.status(400).json({ message: 'Invalid credentials!!. User not found' });  // return here
         }
 
         // Compare the entered password with the stored hashed password
         const passMatch = await bcrypt.compare(password, user.password);
 
         if (!passMatch) {
-            return res.status(400).json({ message: 'Invalid credentials!!...' });  // return here
+            return res.status(400).json({ message: 'Invalid credentials!!. Username or password is incorrect' });  // return here
         }
         // Generate a JWT token with an expiration time of 1 hour
         const token = jwt.sign(

@@ -7,6 +7,7 @@
     <title>
         <%= title %>
     </title>
+    <link rel="stylesheet" href="/css/sweetalert2.min.css">
     <link rel="stylesheet" href="/css/all.min.css">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -40,27 +41,26 @@
                 <li>
                     <a href="/episodes" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">Episodes</a>
                 </li>
-                <% if (user && user.isAdmin === true) { %>
+                <% if (user && user.isAdmin===true) { %>
                     <li>
                         <a href="/upload-movie" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
                             <i class="fa-solid fa-cloud-arrow-up"></i>
                             Upload Movie
                         </a>
                     </li>
-                <% } %>
+                    <% } %>
             </ul>
             <ul class="flex gap-5">
                 <% if (user) { %>
                     <li>
-                        <a href="/profile"
-                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
+                        <a href="/profile" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
                             <i class="fa-solid fa-user"></i>
                             profile
                         </a>
 
                     </li>
-                    <li>
-                        <a href="/logout"
+                    <li onclick="handleLogout(event)">
+                        <a href="/logout" id="logoutBtn"
                             class="transition-all h-full p-2 text-gray-200 hover:text-gray-400 cursor-pointer">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             Logout
@@ -68,16 +68,14 @@
                     </li>
                     <% } else { %>
                         <li>
-                            <a href="/login"
-                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
-                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <a href="/login" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
+                                <i class="fa-solid fa-right-to-bracket"></i>
                                 login
                             </a>
                         </li>
                         <li>
-                            <a href="/register"
-                            class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
-                            <i class="fa-solid fa-plus"></i>
+                            <a href="/register" class="transition-all h-full p-2 text-gray-200 hover:text-gray-400">
+                                <i class="fa-solid fa-plus"></i>
                                 Register
                             </a>
 
@@ -86,3 +84,47 @@
             </ul>
         </nav>
     </header>
+
+    <script>
+        const handleLogout = (event) => {
+            event.preventDefault()
+
+            const logoutBtn = document.getElementById('logoutBtn')
+            console.log(logoutBtn.getAttribute('href'))
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Logout it!",
+                cancelButtonText: "No, Stay logged in! <span class='px-5'> </span>",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: "<p class='bg-red-700 text-white'>Yes Logout!</p>",
+                        text: "Logged out Successfully.",
+                        icon: "success"
+                    });
+                    window.location.href = logoutBtn.getAttribute('href')
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Cancelled",
+                        text: "You're Logged in :)",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    </script>

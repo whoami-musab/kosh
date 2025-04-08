@@ -1,18 +1,24 @@
 <%- include('header', {title: 'Profile Page - ' +user.name.charAt(0).toUpperCase() + user.name.slice(1)}) %>
 
-    <div
+    <form enctype="multipart/form-data" id="profileForm"
         class="profile-page min-h-screen mx-auto container w-full flex flex-col items-center justify-center gap-20 px-5">
         <h1 class="text-3xl underline py-5">
             Hello <%= user.name %>
         </h1>
         <div class="user-details flex flex-col mx-auto container items-center justify-between gap-15">
             <div class="details flex flex-col gap-5 items-center">
-                <div class="img rounded-full w-[15rem] h-[15rem] border-2">
+                <div class="img rounded-full w-[15rem] h-[15rem] border-2 bg-cover bg-center"
+                    style="background-image: url('<%= user.profileImg ? user.profileImg : `/imgs/default.png` %>')">
                 </div>
+                <input type="file" name="profileImg" id="profileImg" class="hidden">
+                <label for="profileImg"
+                    class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
+                    <i class="fa fa-edit"></i>
+                </label>
                 <div class="isAdmin">
                     <% if (user.isAdmin) { %>
-                    <span>Admin</span>
-                    <% } else { %>
+                        <span>Admin</span>
+                        <% } else { %>
                             <span>User</span>
                             <% } %>
                                 <p class="text-6xl font-bold">
@@ -23,36 +29,148 @@
             <div
                 class="user-details-content w-full flex flex-col gap-15 md:w-2xl items-center md:flex-nowrap flex-wrap">
                 <p
-                    class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
-                    <strong>Email:</strong>
-                    <span>
-                        <%= user.email.charAt(0).toUpperCase() + user.email.slice(1) %>
+                    class="flex items-center justify-between w-full flex-wrap text-4xl bg-gray-900 p-5 md:flex-nowrap gap-5">
+                    <strong>Name:</strong>
+                    <input type="text" name="name" id="name" value="<%= user.name %>" disabled
+                        class="bg-white p-2 text-black">
+                    <span class="hidden">
+                        <i class="fa fa-edit cursor-pointer"></i>
                     </span>
                 </p>
                 <p
-                    class="flex items-center justify-between w-full text-4xl bg-gray-900 p-5 md:flex-nowrap flex-wrap gap-5">
+                    class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
+                    <strong>Email:</strong>
+                    <input type="email" name="email" id="email" value="<%= user.email %>" disabled
+                        class="bg-white p-2 text-black">
+                    <span class="hidden">
+                        <i class="fa fa-edit cursor-pointer"></i>
+                    </span>
+                </p>
+                <p
+                    class="flex items-center justify-between w-full flex-wrap text-4xl bg-gray-900 p-5 md:flex-nowrap gap-5">
                     <strong>Address:</strong>
-                    <span>
-                        <%= user.address.charAt(0).toUpperCase() + user.address.slice(1) %>
+                    <input type="text" name="address" id="address" value="<%= user.address %>" disabled
+                        class="bg-white p-2 text-black">
+                    <span class="hidden">
+                        <i class="fa fa-edit cursor-pointer"></i>
                     </span>
                 </p>
                 <p
                     class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
                     <strong>Phone Number:</strong>
-                    <span>
-                        <%= user.phone.charAt(0).toUpperCase() + user.phone.slice(1) %>
+                    <input type="text" name="phone" id="phone" value="<%= user.phone %>" disabled
+                        class="bg-white p-2 text-black">
+                    <span class="hidden">
+                        <i class="fa fa-edit cursor-pointer"></i>
+                    </span>
+                </p>
+                <p
+                    class="flex items-center justify-between w-full flex-wrap text-4xl bg-gray-900 p-5 md:flex-nowrap gap-5">
+                    <strong>Password:</strong>
+                    <input type="password" name="password" id="password" disabled
+                        class="bg-white p-2 text-black">
+                    <span class="cursor-pointer text-white" onclick="togglePassword()">
+                        <i class="fa fa-eye" id="toggleEye"></i>
                     </span>
                 </p>
             </div>
         </div>
-        <button id="register-btn"
+        <button id="edit-btn"
             class="bg-violet-500 mb-5 hover:bg-violet-600 px-6 py-2 rounded cursor-pointer transition text-white w-sm flex justify-between items-center"
-            disabled>
+            onclick="handleEdit(event)">
             Edit Profile
             <i class="fa-solid fa-edit"></i>
         </button>
-    </div>
-
-
+        <button id="update-btn"
+            class="bg-violet-500 hidden mb-5 hover:bg-violet-600 px-6 py-2 rounded cursor-pointer transition text-white w-sm  justify-between items-center"
+            disabled onclick="updateUserData(event)">
+            Update Now
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </form>
 
     <%- include('footer') %>
+
+        <script>
+
+            // fa-eye-slash
+            const togglePassword = () => {
+                const pwd = document.getElementById('password')
+                pwd.type = pwd.type === 'password' ? 'text' : 'password'
+            }
+
+            // Handle Image Preview
+            const imgInput = document.getElementById('profileImg')
+            imgInput.addEventListener('change', () => {
+                const file = imgInput.files[0]
+                if (file) {
+                    const reader = new FileReader()
+                    reader.onload = () => {
+                        document.querySelector('.img').style.backgroundImage = `url('${reader.result}')`
+                    }
+                    reader.readAsDataURL(file)
+                }
+            })
+
+            const updateBtn = document.getElementById('update-btn') // Update BTN
+            const editBtn = document.getElementById('edit-btn') // Edit BTN
+            const inputs = document.querySelectorAll('input') // All inputs
+
+            // Remove all inputs disabled and show update btn and hide edit btn
+            const handleEdit = (event) => {
+
+                event.preventDefault()
+
+                inputs.forEach(input => input.disabled = false)
+                updateBtn.classList.remove('hidden')
+                updateBtn.disabled = false
+                editBtn.classList.add('hidden')
+            }
+
+            // Send data to Back-end
+            const updateUserData = async (event) => {
+                event.preventDefault()
+
+                const form = document.getElementById('profileForm')
+                const formData = new FormData(form)
+
+                // const userData = {
+                //     name: document.getElementById('name').value,
+                //     email: document.getElementById('email').value,
+                //     password: document.getElementById('password').value,
+                //     address: document.getElementById('address').value,
+                //     phone: document.getElementById('phone').value
+                // }
+                const response = await fetch('/profile', {
+                    method: 'PUT',
+                    // headers: { 'Content-Type': 'application/json' },
+                    // body: JSON.stringify(userData)
+                    body: formData
+                })
+
+                const result = await response.json()
+
+                if (response.ok) {
+                    alert(result.message)
+
+
+                    if (result.user?.profileImg) {
+                        document.querySelector('.img').style.background = `url('${result.user.profileImg}')`
+                        // Reset UI state
+                        updateBtn.classList.add('hidden');
+                        updateBtn.disabled = true;
+                        editBtn.classList.remove('hidden');
+                        inputs.forEach(input => input.disabled = true);
+                    }
+                    window.location.href = result.redirect || '/profile'
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: result.message,
+                        footer: '<p>Why do I have this issue. Change your info first?</p>'
+                        });
+                    // alert(result.message)
+                }
+            }
+        </script>

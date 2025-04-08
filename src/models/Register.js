@@ -7,6 +7,7 @@ const registerSchema = new mongoose.Schema({
     phone: {type: String, required: true},
     password: {type: String, required: true, minlength: 4},
     isAdmin: {type: Boolean, required: false, default: false},
+    avatar: {type: String, required: false},
     token: {type: String, required: false}
 })
 
