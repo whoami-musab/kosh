@@ -40,7 +40,9 @@
                 body: JSON.stringify(userData)
             })
             const result = await response.json()
-            if (response.ok) {
+            const json = JSON.parse(result)
+            try{
+                if (response.ok) {
                 localStorage.setItem('aut-token', result.token)
                 if (result.redirect) {
                     window.location.href = result.redirect
@@ -58,7 +60,11 @@
                         text: result.message
                     });
             }
+            
+        }catch(err){
+            console.error('Error fetching JSON', err.message)
         }
+    }
 
     </script>
 

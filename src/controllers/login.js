@@ -43,14 +43,13 @@ loginRouter.post('/', async (req, res) => {
             { expiresIn: '1h' }                     // Token expiration
         );
 
+        // Register user session
         req.session.user = {
             id: user._id,
             username: email,
             token: token,
             isAdmin: user.isAdmin
         }
-
-        // res.redirect('/profile')
 
         // Send the token back to the client
         return res.status(200).json({message: 'Login successfully', token, redirect: '/profile'})

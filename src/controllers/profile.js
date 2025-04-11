@@ -8,15 +8,14 @@ const profileRouter = express.Router()
 
 profileRouter.get('/', async (req, res) => {
     try {
-        if (req.session && req.session.user) {
-            const user = await Register.findById(req.session.user.id)
-            res.render('profile', { user })
-        } else {
-            res.redirect('/login')
+        if (!req.session.user){
+            return res.redirect('/login')
         }
+            const user = await Register.findById(req.session.user?.id)
+            return res.render('profile', { user })
+        
     } catch (err) {
-        console.log(err)
-        return res.status(500).json({ message: 'Server error' })
+        return res.status(500).json({ message: 'Internal Server error' })
     }
 })
 
@@ -46,7 +45,6 @@ const upload = multer({
 
 profileRouter.put('/', upload.single('profileImg'), async (req, res) => {
     const id = req.session.user?.id
-    console.log(id)
     if (!id) {
         return res.status(401).json({ message: 'Unauthorized please try again!...', redirect: '/login' })
     }
@@ -80,7 +78,7 @@ profileRouter.put('/', upload.single('profileImg'), async (req, res) => {
         if (phone && user.phone !== phone) {
             updateFields.phone = req.body.phone
         } if (req.file) {
-            updateFields.profileImg = `/avatars/${req.file.filename}`
+            updateFields.avatar = `/avatars/${req.file.filename}`
         }
         if (Object.keys(updateFields).length === 0) {
             return res.status(400).json({ message: 'No changes detected in your profile. Please try again!...' })
@@ -88,13 +86,11 @@ profileRouter.put('/', upload.single('profileImg'), async (req, res) => {
         const updatedUserData = await Register.findByIdAndUpdate(id, {
             $set: updateFields
         }, { new: true })
-        console.log('Uploaded image path:', req.file?.path)
-        console.log('User profileImg saved as:', updateFields.profileImg)
-        req.session.user = updatedUserData
+        req.session.user.username = updatedUserData.email
         return res.status(200).json({
-            message: 'User updated successfully!..', redirect: '/profile', user: {
-                profileImg: updatedUserData.profileImg
-            }
+            message: 'User updated successfully!..',
+            redirect: '/profile',
+            user:  updatedUserData
         })
 
     } catch (err) {
