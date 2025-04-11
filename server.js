@@ -3,12 +3,12 @@ import cors from 'cors'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
-import mongoose from 'mongoose'
 import session from 'express-session'
+import connectDB from './config/conn.js'
 
 import Register from './src/models/Register.js'
 
-import { notFound } from './src/controllers/errors.js'
+import { notFound, errHandler } from './src/controllers/errors.js'
 
 import loginRouter from './src/controllers/login.js'
 import profileRouter from './src/controllers/profile.js'
@@ -25,10 +25,7 @@ const __dirname = dirname(__filename)
 dotenv.config()
 
 const app = express()
-
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Connected successfully!!!...'))
-    .catch((err) => console.log('Error connecting to DB: ', err))
+connectDB()
 
 app.set('views', path.join(__dirname, 'src', 'views'))
 app.set('view engine', 'ejs')
@@ -71,9 +68,9 @@ app.use('/upload-movie', uploadMovie)
 app.use('/movies', movies)
 app.use('/watch', watchRouter)
 
-// app.all('*', app.use(notFound))
-
 app.use(notFound)
+app.use(errHandler)
+
 app.listen(process.env.PORT, () => {
     console.log('Server running on http://localhost:3000')
 })

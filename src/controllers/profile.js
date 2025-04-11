@@ -46,6 +46,7 @@ const upload = multer({
 
 profileRouter.put('/', upload.single('profileImg'), async (req, res) => {
     const id = req.session.user?.id
+    console.log(id)
     if (!id) {
         return res.status(401).json({ message: 'Unauthorized please try again!...', redirect: '/login' })
     }
@@ -57,10 +58,10 @@ profileRouter.put('/', upload.single('profileImg'), async (req, res) => {
         const { name, email, address, phone, password } = req.body
         const updateFields = {}
         if (email && email.toLowerCase() !== user.email.toLowerCase()) {
-            // const isExistEmail = await Register.findOne({email})
-            // if(isExistEmail){
-            //     return res.status(400).json({message: 'This email already exists. Please try again!...'})
-            // }
+            const isExistEmail = await Register.findOne({email})
+            if(isExistEmail){
+                return res.status(400).json({message: 'This email already exists. Please try again!...'})
+            }
             updateFields.email = email
         }
         if (name && user.name !== name) {
@@ -87,11 +88,15 @@ profileRouter.put('/', upload.single('profileImg'), async (req, res) => {
         const updatedUserData = await Register.findByIdAndUpdate(id, {
             $set: updateFields
         }, { new: true })
+        console.log('Uploaded image path:', req.file?.path)
+        console.log('User profileImg saved as:', updateFields.profileImg)
+        req.session.user = updatedUserData
         return res.status(200).json({
             message: 'User updated successfully!..', redirect: '/profile', user: {
                 profileImg: updatedUserData.profileImg
             }
         })
+
     } catch (err) {
         return res.status(500).json({ message: 'An error occurred while updating the profile!..', err: err.message })
     }
