@@ -40,7 +40,6 @@
                 body: JSON.stringify(userData)
             })
             const result = await response.json()
-            const json = JSON.parse(result)
             try{
                 if (response.ok) {
                 localStorage.setItem('aut-token', result.token)
