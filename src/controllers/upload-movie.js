@@ -25,7 +25,18 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb)=>{
+    const extList = ['.png', '.jpg', '.jpeg', '.webp']
+    const ext = path.extname(file.originalname).toLowerCase()
+    const mime = file.mimetype
+    const mimeList = ['image/png', 'image/jpg', 'image/jpeg']
+    if(!extList.includes(ext) || !mimeList.includes(mime)){
+        return cb(new Error(`Only images are allowed ext = ${extList.join(', ')}`))
+    }
+    cb(null, true)
+}
+
+const upload = multer({ storage: storage, fileFilter });
 
 // Handle movie upload
 uploadMovie.post('/', upload.single('image'), async (req, res) => {

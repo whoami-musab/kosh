@@ -1,0 +1,101 @@
+<%- include('header', {title: 'Users' }) %>
+
+    <ul class="login md:mx-auto md:container min-h-screen md:w-fit w-full flex flex-col items-center justify-center">
+        <% users.forEach(u=> { %>
+            <li id="<%= u.id %>"
+                class="user-details flex flex-col mx-auto container p-5 mb-3 w-fit bg-gray-900 items-center justify-between gap-15">
+                <div class="details flex flex-col gap-5 items-center">
+                    <div class="img rounded-full w-[15rem] h-[15rem] border-2 bg-cover bg-center"
+                        style="background-image: url('<%= u.avatar ? u.avatar : `` %>')">
+                    </div>
+                    <input type="file" name="profileImg" id="profileImg" class="hidden">
+                    <label for="profileImg"
+                        class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
+                        <i class="fa fa-edit"></i>
+                    </label>
+                    <div class="isAdmin">
+                        <% if (u.isAdmin) { %>
+                            <span>Admin</span>
+                            <% } else { %>
+                                <span>User</span>
+                                <% } %>
+                                    <p class="text-6xl font-bold">
+                                        <%= u.name.charAt(0).toUpperCase() + u.name.slice(1) %>
+                                    </p>
+                    </div>
+                </div>
+                <div
+                    class="user-details-content w-full flex flex-col gap-15 md:w-2xl items-center md:flex-nowrap flex-wrap">
+                    <p
+                        class="flex items-center justify-between w-full flex-wrap text-4xl bg-gray-900 p-5 md:flex-nowrap gap-5">
+                        <strong>Name:</strong>
+                        <input type="text" name="name" id="<%= u.name %>" value="<%= u.name %>" disabled
+                            class="bg-white p-2 text-black">
+                        <span class="hidden">
+                            <i class="fa fa-edit cursor-pointer"></i>
+                        </span>
+                    </p>
+                    <p
+                        class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
+                        <strong>Email:</strong>
+                        <input type="email" name="email" id="<%= u.email %>" value="<%= u.email %>" disabled
+                            class="bg-white p-2 text-black">
+                        <span class="hidden">
+                            <i class="fa fa-edit cursor-pointer"></i>
+                        </span>
+                    </p>
+                    <p
+                        class="flex items-center justify-between w-full flex-wrap text-4xl bg-gray-900 p-5 md:flex-nowrap gap-5">
+                        <strong>Address:</strong>
+                        <input type="text" name="address" id="<%= u.address %>" value="<%= u.address %>" disabled
+                            class="bg-white p-2 text-black">
+                        <span class="hidden">
+                            <i class="fa fa-edit cursor-pointer"></i>
+                        </span>
+                    </p>
+                    <p
+                        class="flex items-center justify-between w-full text-4xl bg-gray-600 p-5 md:flex-nowrap flex-wrap gap-5">
+                        <strong>Phone Number:</strong>
+                        <input type="text" name="phone" id="<%= u.phone %>" value="<%= u.phone %>" disabled
+                            class="bg-white p-2 text-black">
+                        <span class="hidden">
+                            <i class="fa fa-edit cursor-pointer"></i>
+                        </span>
+                    </p>
+                    <p
+                        class="flex items-center justify-between w-full flex-wrap text-4xl bg-gray-900 p-5 md:flex-nowrap gap-5">
+                        <strong>Password:</strong>
+                        <input type="password" name="password" id="<%= u.password %>" disabled class="bg-white p-2 text-black">
+                        <span class="cursor-pointer text-white" onclick="togglePassword()">
+                            <i class="fa fa-eye" id="toggleEye"></i>
+                        </span>
+                    </p>
+                </div>
+                <!-- <a href="/users/delete/<%= u.id %>" id="deleteBtn" onclick="deleteUser(event)"
+                    class="flex flex-col items-center px-6 py-2 w-fit cursor-pointer border-red-600 border-2 bg-red-500 text-white hover:bg-red-700 transition-colors">
+                    Delete
+                </a> -->
+            </li>
+            <hr class="bg-white h-1 w-full">
+            <% }) %>
+                </div>
+
+                <%- include('footer') %>
+
+                    <script>
+                        const deleteBtn = document.getElementById('deleteBtn')
+                        const id = deleteBtn.getAttribute('data-href').split('/')[2]
+                        console.log(id)
+                        async function deleteUser(event) {
+                            event.preventDefault()
+
+                            const response = await fetch('/users', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body:'' })
+                            const result = response.json()
+                            if (result.message === 'Unauthorized please try again.') {
+                                window.location.href = result.redirect
+                            }
+                        }
+                    </script>

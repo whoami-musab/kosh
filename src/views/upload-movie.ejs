@@ -55,7 +55,7 @@
             })
 
             const form = document.getElementById("upload-form")
-            form.addEventListener('submit', async (event)=>{
+            form.addEventListener('submit', async (event) => {
                 event.preventDefault()
                 try {
                     const title = document.getElementById('title').value
@@ -74,10 +74,20 @@
 
                     const result = await response.json()
                     if (result.message) {
-                        alert(result.message)
+                        Swal.fire({
+                            title: "Uploaded successfully!",
+                            text: result.message,
+                            icon: "success"
+                        });
+                        // alert(result.message)
                         window.location.href = result.redirect
                     } else {
-                        alert('Error uploading movie')
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result.message
+                        });
+                        // alert('Error uploading movie')
                     }
                 } catch (err) {
                     alert(err.message)

@@ -13,7 +13,6 @@ export const errHandler = async (err, req, res, next) => {
     let user = null
     try{
         if(req.session.user?.id){
-
             user = await Register.findById(req.session.user?.id)
         }
     }catch(fetchErr){
